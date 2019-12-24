@@ -15,6 +15,7 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 set(headers
     mainmenu.h
+    playarea.h
 )
 
 set(sources
@@ -22,6 +23,7 @@ set(sources
   window.cpp
   window.h
   mainmenu.cpp
+  playarea.cpp
 )
 
 add_executable(DragDropGame

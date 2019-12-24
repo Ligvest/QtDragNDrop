@@ -1,18 +1,33 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
-#include <QPushButton>
+#include <QStackedLayout>
+#include <stdexcept>
 
-class Window : public QMainWindow {
+#include "mainmenu.h"
+#include "playarea.h"
+
+class Window : public QWidget {
     Q_OBJECT
 
-   public:
-    Window(QWidget *parent = nullptr);
+public:
+    Window(QWidget* parent = nullptr);
     ~Window();
 
-   private:
-    QWidget menuWidget_;
-    QPushButton button_;
+private slots:
+    void resume();
+    void newGame();
+    void options();
+    void exit();
+    void menu();
+
+    // methods
+private:
+    void connectSignals();
+
+    // fields
+private:
+    QStackedLayout* mainLayout_;
+    MainMenu* menu_;
+    PlayArea* playArea_;
 };
-#endif  // MAINWINDOW_H
