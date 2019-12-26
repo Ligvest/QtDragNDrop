@@ -19,6 +19,7 @@ set(headers
     window.h
     mainmenu.h
     playarea.h
+    dragdroppixmap.h
 )
 set(absHeaders "")
 foreach(header ${headers})
@@ -32,6 +33,7 @@ set(sources
   window.cpp
   mainmenu.cpp
   playarea.cpp
+  dragdroppixmap.cpp
 )
 set(absSources "")
 foreach(source ${sources})
