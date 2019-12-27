@@ -7,6 +7,7 @@
 #include <QWidget>
 
 #include "dragdroppixmap.h"
+#include "inventory.h"
 
 class PlayArea : public QWidget {
     Q_OBJECT
@@ -16,17 +17,11 @@ public:
 signals:
     void signalEscPressed();
 
-public slots:
-
-    // methods
-private:
-    void initInventory();
-
     // fields
 private:
     QHBoxLayout* mainLayout_;
-    QTableWidget* inventory_;
-    DragDropPixmap* source_;
+    Inventory* inventory_;
+    DragDropPixmap* applesSource_;
 
     // overrided
 private:

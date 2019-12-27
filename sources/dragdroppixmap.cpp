@@ -1,18 +1,27 @@
-#include "../headers/dragdroppixmap.h"
+#include "dragdroppixmap.h"
+
+#include <QBuffer>
+#include <QMessageBox>
 
 DragDropPixmap::DragDropPixmap(QString objectName, QString imagePath) {
-    setPixmap(QPixmap(imagePath).scaled(100, 100));
+    image_ = QPixmap(imagePath);
+    setPixmap(image_.scaled(100, 100));
     objectName_ = objectName;
 }
 
 void DragDropPixmap::startDrag() {
+    //    mimeData->setText(objectName_);
+    QByteArray data;
+    QBuffer buf(&data);
     QMimeData* mimeData = new QMimeData;
-    mimeData->setText(objectName_);
+    buf.open(QIODevice::WriteOnly);
+    image_.save(&buf, "PNG");
+    mimeData->setData("image/png", data);
 
     QDrag* drag = new QDrag(this);
     drag->setMimeData(mimeData);
     drag->setPixmap(*pixmap());
-    drag->exec();
+    drag->exec(Qt::MoveAction);
 }
 
 void DragDropPixmap::mousePressEvent(QMouseEvent* ev) {

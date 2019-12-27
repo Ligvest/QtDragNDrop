@@ -20,6 +20,8 @@ set(headers
     mainmenu.h
     playarea.h
     dragdroppixmap.h
+    inventory.h
+    inventoryitem.h
 )
 set(absHeaders "")
 foreach(header ${headers})
@@ -34,6 +36,8 @@ set(sources
   mainmenu.cpp
   playarea.cpp
   dragdroppixmap.cpp
+  inventory.cpp
+  inventoryitem.cpp
 )
 set(absSources "")
 foreach(source ${sources})

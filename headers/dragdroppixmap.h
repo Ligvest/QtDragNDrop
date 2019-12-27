@@ -6,12 +6,14 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QPixmap>
+#include <QTableWidgetItem>
 
-class DragDropPixmap : public QLabel {
+class DragDropPixmap : public QLabel, public QTableWidgetItem {
     Q_OBJECT
 
 public:
     DragDropPixmap(QString objectName, QString imagePath);
+    DragDropPixmap(QString objectName);
 
     // methods
 private:
@@ -21,6 +23,7 @@ private:
 private:
     QPoint dragBeginPos_;
     QString objectName_;
+    QPixmap image_;
 
 protected:
     // For dragging
