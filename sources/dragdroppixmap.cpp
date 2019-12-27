@@ -1,7 +1,7 @@
 #include "../headers/dragdroppixmap.h"
 
-DragDropPixmap::DragDropPixmap(QString objectName, QPixmap image) {
-    image_ = image;
+DragDropPixmap::DragDropPixmap(QString objectName, QString imagePath) {
+    setPixmap(QPixmap(imagePath).scaled(100, 100));
     objectName_ = objectName;
 }
 
@@ -11,7 +11,7 @@ void DragDropPixmap::startDrag() {
 
     QDrag* drag = new QDrag(this);
     drag->setMimeData(mimeData);
-    drag->setPixmap(QPixmap(":/images/resources/" + objectName_ + ".png"));
+    drag->setPixmap(*pixmap());
     drag->exec();
 }
 

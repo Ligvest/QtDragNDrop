@@ -1,9 +1,12 @@
 #pragma once
 
 #include <QHBoxLayout>
+#include <QHeaderView>
 #include <QKeyEvent>
 #include <QTableWidget>
 #include <QWidget>
+
+#include "dragdroppixmap.h"
 
 class PlayArea : public QWidget {
     Q_OBJECT
@@ -15,10 +18,15 @@ signals:
 
 public slots:
 
+    // methods
+private:
+    void initInventory();
+
     // fields
 private:
-    QTableWidget* inventory_;
     QHBoxLayout* mainLayout_;
+    QTableWidget* inventory_;
+    DragDropPixmap* source_;
 
     // overrided
 private:

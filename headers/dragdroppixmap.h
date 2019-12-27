@@ -11,7 +11,7 @@ class DragDropPixmap : public QLabel {
     Q_OBJECT
 
 public:
-    DragDropPixmap(QString objectName, QPixmap image);
+    DragDropPixmap(QString objectName, QString imagePath);
 
     // methods
 private:
@@ -21,7 +21,6 @@ private:
 private:
     QPoint dragBeginPos_;
     QString objectName_;
-    QPixmap image_;
 
 protected:
     // For dragging
