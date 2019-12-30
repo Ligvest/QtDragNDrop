@@ -19,7 +19,7 @@ set(headers
     window.h
     mainmenu.h
     playarea.h
-    dragdroppixmap.h
+    itemssource.h
     inventory.h
     inventoryitem.h
 )
@@ -35,7 +35,7 @@ set(sources
   window.cpp
   mainmenu.cpp
   playarea.cpp
-  dragdroppixmap.cpp
+  itemssource.cpp
   inventory.cpp
   inventoryitem.cpp
 )

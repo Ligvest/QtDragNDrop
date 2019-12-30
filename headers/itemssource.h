@@ -8,12 +8,12 @@
 #include <QPixmap>
 #include <QTableWidgetItem>
 
-class DragDropPixmap : public QLabel, public QTableWidgetItem {
+class ItemsSource : public QLabel, public QTableWidgetItem {
     Q_OBJECT
 
 public:
-    DragDropPixmap(QString objectName, QString imagePath);
-    DragDropPixmap(QString objectName);
+    ItemsSource(QString objectName, QString imagePath);
+    ItemsSource(QString objectName);
 
     // methods
 private:

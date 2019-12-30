@@ -1,22 +1,17 @@
-#include "dragdroppixmap.h"
+#include "itemssource.h"
 
 #include <QBuffer>
 #include <QMessageBox>
 
-DragDropPixmap::DragDropPixmap(QString objectName, QString imagePath) {
+ItemsSource::ItemsSource(QString objectName, QString imagePath) {
     image_ = QPixmap(imagePath);
     setPixmap(image_.scaled(100, 100));
     objectName_ = objectName;
 }
 
-void DragDropPixmap::startDrag() {
-    //    mimeData->setText(objectName_);
-    QByteArray data;
-    QBuffer buf(&data);
+void ItemsSource::startDrag() {
     QMimeData* mimeData = new QMimeData;
-    buf.open(QIODevice::WriteOnly);
-    image_.save(&buf, "PNG");
-    mimeData->setData("image/png", data);
+    mimeData->setText("apple");
 
     QDrag* drag = new QDrag(this);
     drag->setMimeData(mimeData);
@@ -24,14 +19,14 @@ void DragDropPixmap::startDrag() {
     drag->exec(Qt::MoveAction);
 }
 
-void DragDropPixmap::mousePressEvent(QMouseEvent* ev) {
+void ItemsSource::mousePressEvent(QMouseEvent* ev) {
     if (ev->button() == Qt::LeftButton) {
         dragBeginPos_ = ev->pos();
     }
     QWidget::mousePressEvent(ev);
 }
 
-void DragDropPixmap::mouseMoveEvent(QMouseEvent* ev) {
+void ItemsSource::mouseMoveEvent(QMouseEvent* ev) {
     int distance = (ev->pos() - dragBeginPos_).manhattanLength();
     if (distance > QApplication::startDragDistance()) {
         startDrag();

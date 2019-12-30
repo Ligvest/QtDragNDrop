@@ -6,11 +6,12 @@
 #include <QTableWidget>
 #include <QWidget>
 
-#include "dragdroppixmap.h"
 #include "inventory.h"
+#include "itemssource.h"
 
 class PlayArea : public QWidget {
     Q_OBJECT
+    // ctors
 public:
     explicit PlayArea(QWidget* parent = nullptr);
 
@@ -21,7 +22,7 @@ signals:
 private:
     QHBoxLayout* mainLayout_;
     Inventory* inventory_;
-    DragDropPixmap* applesSource_;
+    ItemsSource* applesSource_;
 
     // overrided
 private:

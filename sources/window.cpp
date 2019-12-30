@@ -20,7 +20,7 @@ void Window::newGame() { mainLayout_->setCurrentWidget(playArea_); }
 
 void Window::options() { throw std::logic_error("Not implemented"); }
 
-void Window::exit() { throw std::logic_error("Not implemented"); }
+void Window::exit() { ::exit(0); }
 
 void Window::menu() { mainLayout_->setCurrentWidget(menu_); }
 

@@ -15,15 +15,11 @@ public:
     QPushButton *optionsButton() const;
     QPushButton *exitButton() const;
 
-signals:
-    void signalChangeState();
-
 public slots:
 
     // methods
 private:
     void initLayoutsAndButtons();
-    void connectButtonsWithSignals();
 
     // fields
 private:

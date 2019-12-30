@@ -3,8 +3,19 @@
 #include <QMessageBox>
 
 Inventory::Inventory() {
+    // Right click behavior
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, &QTableWidget::customContextMenuRequested, this,
+            &Inventory::onContextMenuRequested);
+
+    // Set cells display policy and hide indices
     horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    horizontalHeader()->setVisible(false);
+    verticalHeader()->setVisible(false);
+
+    // Forbid editing
+    setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     // Allow drag and drop
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -12,15 +23,15 @@ Inventory::Inventory() {
     setAcceptDrops(true);
     setDropIndicatorShown(true);
 
-    // Hide indices
-    horizontalHeader()->setVisible(false);
-    verticalHeader()->setVisible(false);
-
     // Set size of table
     setRowCount(3);
     setColumnCount(3);
 
     // Fill table with items
+    fillTable();
+}
+
+void Inventory::fillTable() {
     for (size_t row = 0; row < rowCount(); ++row) {
         for (size_t col = 0; col < columnCount(); ++col) {
             InventoryItem *item = new InventoryItem();
@@ -31,42 +42,62 @@ Inventory::Inventory() {
     }
 }
 
-void Inventory::dragEnterEvent(QDragEnterEvent *ev) { ev->acceptProposedAction(); }
-
-void Inventory::mousePressEvent(QMouseEvent *ev) {
-    if (ev->button() == Qt::RightButton) {
+void Inventory::decreaseItemsCount(InventoryItem *item, size_t subtrahend) {
+    if (item == nullptr) {
+        return;
     }
-    QTableWidget::mousePressEvent(ev);
+    if (item->count() < 1) {
+        return;
+    }
+    item->setCount(item->count() - subtrahend);
 }
 
-bool Inventory::dropMimeData(int row, int column, const QMimeData *data, Qt::DropAction action) {
-    if (currentRow() != row || currentColumn() != column) {
-        // Item we dragged
-        InventoryItem *sourceItem =
-            static_cast<InventoryItem *>(item(currentRow(), currentColumn()));
+void Inventory::onContextMenuRequested(const QPoint &pos) {
+    InventoryItem *currentItem = static_cast<InventoryItem *>(itemAt(pos));
+    decreaseItemsCount(currentItem, 1);
+}
 
-        // Item on which we drop
-        InventoryItem *destinationItem = static_cast<InventoryItem *>(item(row, column));
-
-        if (sourceItem == nullptr) {
-            destinationItem->setCount(destinationItem->count() + 1);
-            QPixmap image;
-            image.loadFromData(data->data("image/png"));
-            destinationItem->setIcon(image);
-        } else {
-            destinationItem->setCount(destinationItem->count() + sourceItem->count());
-            destinationItem->setIcon(sourceItem->icon());
-            sourceItem->setCount(0);
-            sourceItem->setIcon(QIcon());
-        }
-
-        // Clear selection
-        setCurrentCell(-1, -1);
-        clearSelection();
+void Inventory::mouseMoveEvent(QMouseEvent *ev) {
+    // disable possibility to drag by right mouse button
+    if (ev->buttons() & Qt::RightButton) {
+        // do nothing
+    } else {
+        QTableView::mouseMoveEvent(ev);
     }
-    return true;
 }
 
 QStringList Inventory::mimeTypes() const {
-    return QTableWidget::mimeTypes() << QString("image/png");
+    return QTableWidget::mimeTypes() << QString("text/plain");
+}
+
+bool Inventory::dropMimeData(int row, int column, const QMimeData *data, Qt::DropAction action) {
+    // Item on which we drop
+    InventoryItem *destinationItem = static_cast<InventoryItem *>(item(row, column));
+
+    // If we dragged from outside of the table view
+    if (data->hasText()) {
+        destinationItem->setCount(destinationItem->count() + 1);
+        destinationItem->setIcon(QIcon(":/images/resources/apple.png"));
+        return true;
+    }
+
+    // Do nothing if we drop to the cell from which we dragged
+    if (currentRow() == row && currentColumn() == column) {
+        return true;
+    }
+
+    // Item we dragged
+    InventoryItem *sourceItem = static_cast<InventoryItem *>(item(currentRow(), currentColumn()));
+    if (sourceItem->count() > 0) {
+        // Move all objects from source to destination
+        destinationItem->setCount(destinationItem->count() + sourceItem->count());
+        destinationItem->setIcon(sourceItem->icon());
+        // Clear source cell
+        decreaseItemsCount(sourceItem, sourceItem->count());
+    }
+
+    // Clear selection
+    setCurrentCell(-1, -1);
+    clearSelection();
+    return true;
 }

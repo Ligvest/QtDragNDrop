@@ -7,7 +7,6 @@ MainMenu::MainMenu(QWidget *parent)
     setPalette(QPalette(QColor(Qt::GlobalColor::cyan)));
 
     initLayoutsAndButtons();
-    connectButtonsWithSignals();
 }
 
 void MainMenu::initLayoutsAndButtons() {
@@ -24,10 +23,6 @@ void MainMenu::initLayoutsAndButtons() {
     hLayout_->addStretch();
     hLayout_->setSpacing(0);
     this->setLayout(hLayout_);
-}
-
-void MainMenu::connectButtonsWithSignals() {
-    connect(newGameButton_, &QPushButton::clicked, this, &MainMenu::signalChangeState);
 }
 
 // getters
