@@ -23,6 +23,9 @@ protected slots:
     void onContextMenuRequested(const QPoint& pos);
 
 protected:
+    // Center Qt::DecorationRole
+    virtual QStyleOptionViewItem viewOptions() const override;
+
     // Implement dropping behavior
     virtual bool dropMimeData(int row, int column, const QMimeData* data,
                               Qt::DropAction action) override;

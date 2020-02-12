@@ -1,4 +1,5 @@
 #include "inventory.h"
+#include <QDebug>
 
 #include <QMessageBox>
 
@@ -57,6 +58,14 @@ void Inventory::onContextMenuRequested(const QPoint &pos) {
     decreaseItemsCount(currentItem, 1);
 }
 
+QStyleOptionViewItem Inventory::viewOptions() const
+{
+    QStyleOptionViewItem options = QTableWidget::viewOptions();
+//    options.decorationPosition = QStyleOptionViewItem::Top; //above the text
+    options.decorationAlignment = Qt::AlignTop;
+    return options;
+}
+
 void Inventory::mouseMoveEvent(QMouseEvent *ev) {
     // disable possibility to drag by right mouse button
     if (ev->buttons() & Qt::RightButton) {
@@ -70,14 +79,19 @@ QStringList Inventory::mimeTypes() const {
     return QTableWidget::mimeTypes() << QString("text/plain");
 }
 
+//make square cells
+//change size on change window size (or table size) (redraw all images)
 bool Inventory::dropMimeData(int row, int column, const QMimeData *data, Qt::DropAction action) {
     // Item on which we drop
     InventoryItem *destinationItem = static_cast<InventoryItem *>(item(row, column));
 
     // If we dragged from outside of the table view
     if (data->hasText()) {
+        QPixmap image(":/images/resources/apple.png");
+        int cellWidth = columnWidth(0);
+        int cellHeight = rowHeight(0);
         destinationItem->setCount(destinationItem->count() + 1);
-        destinationItem->setIcon(QIcon(":/images/resources/apple.png"));
+        destinationItem->setData(Qt::DecorationRole, image.scaled(cellWidth,cellHeight, Qt::KeepAspectRatio));
         return true;
     }
 
@@ -86,12 +100,13 @@ bool Inventory::dropMimeData(int row, int column, const QMimeData *data, Qt::Dro
         return true;
     }
 
+
     // Item we dragged
     InventoryItem *sourceItem = static_cast<InventoryItem *>(item(currentRow(), currentColumn()));
     if (sourceItem->count() > 0) {
         // Move all objects from source to destination
         destinationItem->setCount(destinationItem->count() + sourceItem->count());
-        destinationItem->setIcon(sourceItem->icon());
+        destinationItem->setData(Qt::DecorationRole,sourceItem->data(Qt::DecorationRole));
         // Clear source cell
         decreaseItemsCount(sourceItem, sourceItem->count());
     }
